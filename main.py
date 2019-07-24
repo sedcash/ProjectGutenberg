@@ -28,16 +28,17 @@ class BookAnalyzer:
             print(result[0],": ",result[1])
 
     def get20MostInterestingFrequentWords(self):
-        common_used = ['a', 'about', 'all', 'also', 'and', 'as', 'at', 'be', 'because', 'but', 'by', 'can', 'come', 'could', 'day', \
-        'do', 'even', 'find', 'first', 'for', 'from', 'get', 'give', 'go', 'have', 'he', 'her', 'here', 'him', 'his', \
-        'how', 'I', 'if', 'in', 'into', 'it', 'its', 'just', 'know', 'like', 'look', 'make', 'man', 'many', 'me', \
-        'more', 'my', 'new', 'no', 'not', 'now', 'of', 'on', 'one', 'only', 'or', 'other', 'our', 'out', 'people', \
-        'say', 'see', 'she', 'so', 'some', 'take', 'tell', 'than', 'that', 'the', 'their', 'them', 'then', 'there', \
-        'these', 'they', 'thing', 'think', 'this', 'those', 'time', 'to', 'two', 'up', 'use', 'very', 'want', 'way', \
-        'we', 'well', 'what', 'when', 'which', 'who', 'will', 'with', 'would', 'year', 'you', 'your' ," "]
+        common_used = ['a', 'an', 'any', 'about', 'all', 'also', 'and', 'as', 'at', 'be', 'been', 'because', 'but', 'by', 'can', 'come',
+                       'could', 'day', "did", 'do', 'even', 'find', 'first', 'for', 'from', 'get', 'give', 'go', 'had', 'has', 'have', 'he',
+                       'her', 'here', 'him', 'his', 'how', 'i', 'if', 'in', 'into', 'is', 'it', 'its', 'just', 'know', 'like',
+                       'look', 'make', 'man', 'many', 'me', 'more', 'my', 'new', 'no', 'not', 'now', 'of', 'on', 'one',
+                       'only', 'or', 'other', 'our', 'out', 'people', 's', 'said', 'say', 'see', 'she', 'so', 'some', 'take', 'tell',
+                       'than', 'that', 'the', 'their', 'them', 'then', 'there', 'these', 'they', 'thing', 'think', 'this',
+                       'those', 'time', 'to', 'two', 'up', 'use', 'very', 'was','want', 'way','we', 'were', 'well', 'what', 'when',
+                       'which', 'who', 'will', 'with', 'would', 'year', 'you', 'your', " ",]
 
         items = list(self.word_bank.items())
-        non_common = list(filter(lambda x: x[0].lower() not in common_used, items))
+        non_common = [x for x in items if x[0] not in common_used]
         non_common = sorted(non_common, key = lambda x: x[1], reverse=True)
         return non_common[:20]
 
@@ -125,7 +126,7 @@ class BookAnalyzer:
             else:
                 if sent not in skip:
                     text += sent + " "
-                temp = re.sub(pun_pattern, " ", sent)
+                temp = re.sub(pun_pattern, " ", sent).lower()
                 temp = temp.split(" ")
                 words.extend(temp)
         chapters[curr_chap] = text
@@ -141,8 +142,6 @@ class BookAnalyzer:
 
 file = "/Users/sedrick/Documents/The-Man-in-Black-An-Historical-Novel-of-the-Days-of-Queen-Anne_51174/data/data.txt"
 analyzer = BookAnalyzer(file)
-print(analyzer.get20MostFrequentWords())
-print()
 analyzer.printTotalNumberOfWords()
 print()
 analyzer.printTotalUniqueWords()
@@ -151,7 +150,7 @@ analyzer.print20MostFrequentWords()
 print()
 analyzer.print20MostInterestingFrequentWords()
 print()
-analyzer.get20LeastFrequentWords()
+analyzer.print20LeastFrequentWords()
 print()
 analyzer.printFrequencyOfWord("and")
 print()
