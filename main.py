@@ -1,5 +1,5 @@
 from collections import Counter
-import re, random
+import re, random, string
 class BookAnalyzer:
     def __init__(self, file):
         self.file = file
@@ -37,7 +37,7 @@ class BookAnalyzer:
         'we', 'well', 'what', 'when', 'which', 'who', 'will', 'with', 'would', 'year', 'you', 'your' ," "]
 
         items = list(self.word_bank.items())
-        non_common = list(filter(lambda x: x[0] not in common_used, items))
+        non_common = list(filter(lambda x: x[0].lower() not in common_used, items))
         non_common = sorted(non_common, key = lambda x: x[1], reverse=True)
         return non_common[:20]
 
@@ -102,7 +102,7 @@ class BookAnalyzer:
         words = []
         chapter = "CHAPTER"
         roman_pattern = "\s(.*?)\."
-        pun_pattern = "[\.?,!]"
+        pun_pattern = "[^A-Za-z0-9]+"
         text = ""
         chapters = {}
         curr_chap = 0
@@ -125,11 +125,13 @@ class BookAnalyzer:
             else:
                 if sent not in skip:
                     text += sent + " "
-                temp = [re.sub(pun_pattern, " ", x).strip() for x in sent]
+                temp = re.sub(pun_pattern, " ", sent)
+                temp = temp.split(" ")
                 words.extend(temp)
         chapters[curr_chap] = text
 
         self.word_bank = Counter(words)
+        del self.word_bank[""]
         self.chapters = chapters
 
     def romanToInt(self, roman):
@@ -139,6 +141,7 @@ class BookAnalyzer:
 
 file = "/Users/sedrick/Documents/The-Man-in-Black-An-Historical-Novel-of-the-Days-of-Queen-Anne_51174/data/data.txt"
 analyzer = BookAnalyzer(file)
+print(analyzer.get20MostFrequentWords())
 print()
 analyzer.printTotalNumberOfWords()
 print()
